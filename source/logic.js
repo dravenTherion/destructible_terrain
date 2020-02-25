@@ -221,6 +221,7 @@ var World = (function(){
             
 
         // update players' quadtree location 
+        
         for(let ctr; ctr < charList.length; ctr++)
             _worldTree.insert(charList[ ctr ].object);
         
@@ -247,7 +248,9 @@ var World = (function(){
         _data.innerHTML = Math.round(_fpsTotal.reduce((total, num)=>{return total + num;}) / _fpsTotal.length) + ' fps <br />' + collisionCount + ' collisions';
     }
     
+    
     // clear canvas
+    
     function _clearCanvas(){
         
         for(let ctr = 0; ctr < arguments.length; ctr++)

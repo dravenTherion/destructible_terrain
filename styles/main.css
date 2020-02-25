@@ -204,11 +204,9 @@ canvas{
     width: 30px;
     height: 30px;
     
-    transform: translate(-50%, -50%);
-    
     pointer-events: none;
     
-    transform: rotate(45deg);
+    transform: translate(-50%, -50%) rotate(45deg);
     
     border-width: 2px;
 }
