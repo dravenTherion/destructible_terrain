@@ -309,4 +309,11 @@ window.addEventListener('load', (e)=>{
     window.addEventListener('blur', (e)=>{World.stop()});
     window.addEventListener('focus', (e)=>{World.start()});
     
+    window.addEventListener('mousemove', (e)=>{
+    
+        $('#pointer').style.left = e.pageX + 'px'; 
+        $('#pointer').style.top = e.pageY + 'px'; 
+        
+    });
+    
 });

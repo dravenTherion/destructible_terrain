@@ -80,6 +80,8 @@ canvas{
     background: rgb(37, 162, 145);
     background: linear-gradient(0deg, rgba(44,207,221,1) 0%, rgba(44,186,158,1) 50%, rgba(10,65,92,1) 100%);
     
+    cursor: none;
+    
 }
 
 
@@ -175,4 +177,116 @@ canvas{
     font-family: 'Helvetica', 'Arial', sans-serif;
     font-size: 10px;
     
+}
+
+#pointer,
+#pointer_crosshairs_tb,
+#pointer_crosshairs_lr{
+    
+    transform-origin: center center;
+    
+}
+
+#pointer,
+#pointer:after,
+#pointer_crosshairs_tb:before,
+#pointer_crosshairs_tb:after,
+#pointer_crosshairs_lr:before,
+#pointer_crosshairs_lr:after{
+    
+    border: 1px solid #ffb5ce;
+    box-shadow: 0 0 4px 1px #ff4584, 0 0 4px 1px #ff4584 inset;   
+    
+}
+
+#pointer{
+    
+    width: 30px;
+    height: 30px;
+    
+    transform: translate(-50%, -50%);
+    
+    pointer-events: none;
+    
+    transform: rotate(45deg);
+    
+    border-width: 2px;
+}
+
+#pointer:after{
+    
+    content: '';
+    position: absolute;
+    display: block;
+    
+    height: 10%;
+    width: 10%;
+    
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    
+    margin: auto;
+    
+    border-radius: 100px;
+    border-width: 2px;
+    
+}
+
+
+#pointer_crosshairs_tb,
+#pointer_crosshairs_lr{
+    
+    width: 100%;
+    height: 100%;
+    
+    left: 50%;
+    top: 50%;
+    
+    transform: translate(-50%, -50%);
+    
+}
+
+#pointer_crosshairs_lr{
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+#pointer_crosshairs_tb:before,
+#pointer_crosshairs_tb:after,
+#pointer_crosshairs_lr:before,
+#pointer_crosshairs_lr:after{
+
+    content: '';
+    position: absolute;
+    display: block;
+    
+    height: 25%;
+    width: 0px;
+    
+    left: 50%;
+    margin-left: -1px;
+
+    animation: bob-up 0.5s linear infinite alternate; 
+    
+    z-index: 0;
+}
+
+#pointer_crosshairs_tb:after,
+#pointer_crosshairs_lr:after{
+    
+    bottom: 0px;
+
+    animation: bob-down 0.5s linear infinite alternate; 
+    
+}
+
+@keyframes bob-up {
+  from {transform: translateY(-35%);}
+  to {transform: translateY(-65%);}
+}
+
+@keyframes bob-down {
+  from {transform: translateY(35%);}
+  to {transform: translateY(65%);}
 }

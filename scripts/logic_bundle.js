@@ -483,6 +483,13 @@ window.addEventListener('load', (e)=>{
     window.addEventListener('blur', (e)=>{World.stop()});
     window.addEventListener('focus', (e)=>{World.start()});
     
+    window.addEventListener('mousemove', (e)=>{
+    
+        $('#pointer').style.left = e.pageX + 'px'; 
+        $('#pointer').style.top = e.pageY + 'px'; 
+        
+    });
+    
 });
 },{"./helpers/":3,"./input_manager/input":6,"./objects/bullet":8,"./objects/managers/":10,"./objects/player/":14,"./objects/player/player_animator":15,"./objects/player/player_input":16,"./renderer/helpers":18,"./terrain/":20,"qt-js":1}],8:[function(require,module,exports){
 const {Geom, Circ, Point, testCirc} = require('qt-js');
