@@ -1517,10 +1517,7 @@ class PlayerAnimator extends Animator{
         if(this.attachment === undefined)
             return;
         
-        this.centerX = player.x + player.width * 0.5;
-        this.centerY = player.y + player.height * 0.5;
-     
-        
+    
         const source = this.source,
               context = this.context,
               player = this.attachment,
@@ -1537,6 +1534,10 @@ class PlayerAnimator extends Animator{
               
               
               flash = parts.flash;             
+        
+        
+        this.centerX = player.x + player.width * 0.5;
+        this.centerY = player.y + player.height * 0.5;
         
         
         if(!player.airborne)
