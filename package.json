@@ -1,0 +1,19 @@
+{
+  "name": "px_terrain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "qt-js": "^1.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "quadtree",
+    "destructible terrain"
+  ],
+  "author": "Antonio Quitoriano <i.am.quitoriano@gmail.com> (https://www.madpolarlabs.com)",
+  "license": "ISC"
+}

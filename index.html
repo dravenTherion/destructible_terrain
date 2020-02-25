@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Quadtree Experiment - Destructible Terrain</title>
+        <meta name="description" content="A quadtree experiment on destructible terrain.">
+        
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="styles/main.css" type="text/css" >
+        
+        <script src="../../gsap/tweenmax_1.19.0_min.js"></script>
+        <script src="scripts/logic_bundle.js" type="module"></script>
+        
+    </head>
+    
+    <body>
+    
+    <div id="root">
+        
+        <div id="bg"></div>
+        
+        <img id="logo" src="images/logo.png" />
+        <img id="terrain_image" src="images/terrain2.png" />
+        <img id="spritesheet" src="images/spritesheet_all.png" />
+        <img id="instructions" src="images/instructions.png" />
+                
+        <canvas id="terrain_background" width="800" height="800"></canvas>
+        <canvas id="terrain_foreground" width="800" height="800"></canvas>
+        <canvas id="world" width="800" height="800"></canvas>
+           
+        <div id="data"></div>
+        
+        <div id="controls">
+            
+        
+        </div>
+    
+    </div>    
+    
+    </body>
+    
+</html>

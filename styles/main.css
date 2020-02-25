@@ -1,0 +1,178 @@
+
+window, 
+document,
+body,
+div,
+span,
+canvas,
+img,
+a{
+    
+    margin: 0px;
+    padding: 0px;
+    
+    position: absolute;
+    display: block;
+    
+}
+
+html,
+window,
+document,
+body{
+    
+    width: 100%;
+    height: 100%;
+    
+    overflow: hidden;
+    background-color: #EFEFEF;
+    
+}
+
+img{
+    
+    position: absolute;
+    visibility: hidden;
+    
+    -webkit-transform: translate( -100%, -100% );
+    -moz-transform: translate( -100%, -100% );
+    -o-transform: translate( -100%, -100% );
+    transform: translate( -100%, -100% ); 
+    
+}
+
+span{
+    
+    display: block;
+    
+    width: 50px;
+    height: 50px;
+    
+    background-color: aqua;
+    
+    cursor: pointer;
+
+}
+
+canvas{
+    
+    left: 0px;
+    top:  0px; 
+    
+    /*background-color: #EFEFEF;*/
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
+    
+    -webkit-transform: translateZ( 0 );
+    -moz-transform: translateZ( 0 );
+    -o-transform: translateZ( 0 );
+    transform: translateZ( 0 );
+    
+}
+
+#root{
+    
+    width: 100%;
+    height: 100%;
+    
+    background: rgb(37, 162, 145);
+    background: linear-gradient(0deg, rgba(44,207,221,1) 0%, rgba(44,186,158,1) 50%, rgba(10,65,92,1) 100%);
+    
+}
+
+
+#bg{
+    
+    width: 100%;
+    height: 100%;
+    
+    /*
+    background-image: url(../images/stars.png);
+    background-repeat: repeat-x;
+    background-size: 90px auto;
+    */
+}
+
+#bg:before,
+#bg:after{
+    
+    content: '';
+    position: absolute;
+    display: block;
+    
+    width: 100%;
+    height: 100%;
+    
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
+    
+    -webkit-transform: translateZ( 0 );
+    -moz-transform: translateZ( 0 );
+    -o-transform: translateZ( 0 );
+    transform: translateZ( 0 );
+}
+    
+#bg:before{
+    
+    width: 500px;
+    height: 500px;
+    
+    right: 0px;
+    top: 0px;
+    
+    border-radius: 800px;
+    
+    box-shadow: -6px -6px 20px 0px rgba(255, 255, 255, 0.35), inset 30px 30px 70px 20px rgba(198, 237, 255, 0.5);
+    
+    background-color: rgba(255, 255, 255, 0.5);
+    background: linear-gradient(300deg, rgba(255, 255, 255, 0) 16%, rgba(255, 255, 255, 0.25) 100%);
+    
+    transform: translate(20%, -8%);
+    
+}
+
+#bg:after{    
+    
+    background-image: url(../images/clouds2.png), url(../images/clouds.png);
+    background-repeat: repeat-x;
+    background-position: bottom;
+    
+    animation: clouds 240s linear infinite;    
+
+}
+
+#bg.paused:after{
+    
+    animation-play-state: paused;
+    
+}
+
+
+@keyframes clouds {
+  from {background-position: 2694px bottom, 0px bottom;}
+  to {background-position: 0px bottom, 898px bottom;}
+}
+
+
+#data{
+    
+    bottom: 0px;
+    
+    padding: 5px;
+    
+    width: 70px;
+
+    text-align: center;
+    vertical-align: middle;
+    
+    background-color:  #333;
+    color: #FEFEFE;
+    
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 10px;
+    
+}
