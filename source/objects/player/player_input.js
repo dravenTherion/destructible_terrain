@@ -17,7 +17,7 @@ class PlayerInput extends InputManager{
         this.mouseX = window.innerWidth;
         this.mouseY = window.innerHeight;
         
-        this.lookUpThreshold = -55;
+        this.lookUpThreshold = -60;
         this.lookDownThreshold = 55;
         
         this.angleLock = false;

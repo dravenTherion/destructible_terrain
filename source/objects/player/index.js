@@ -223,8 +223,10 @@ class Character extends Box{
         
         const collideList = [];
         
+        // retrieve the the possible terrain colliders for the character
         tree.retrieve(collideList, collideBounds);
-                        
+        
+        // update the character's hitbox positions
         this.moveHitBox(newX, newY);
             
         const hit = this.terrainHitTest(collideList),

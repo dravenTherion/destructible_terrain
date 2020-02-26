@@ -174,6 +174,7 @@ module.exports = Input;
 },{}],7:[function(require,module,exports){
 // Helpers
 const {$} = require('./helpers/');
+const renderFps = require('./renderer/fps');
 const {drawRect, drawCirc} = require('./renderer/helpers');
 
 // Quadtree Components
@@ -226,11 +227,7 @@ var World = (function(){
                 
         _data,
         
-        _bullets = [],        
-        
-        _lastCalledTime = 0,
-        _fpsTotal = [],
-        _delta = 0;
+        _bullets = [];
     
     
     function _init(){
@@ -333,8 +330,7 @@ var World = (function(){
         _player.y = 200;                        
         
         
-        // initialize player input manager
-        
+        // initialize player input manager   
         _playerInputManager.attach(_player);
         _playerInputManager.addInputs(
         
@@ -378,7 +374,7 @@ var World = (function(){
         
     }
 
-    // rendering
+    // render frame
     function _render(){
         
         let collisionCount  = 0;
@@ -403,57 +399,9 @@ var World = (function(){
         collisionCount += _bulletManager.update().collisions;
         collisionCount += _objectManager.update().collisions;
         
+        const fps = renderFps();
         
-        if(!_lastCalledTime) {
-            _lastCalledTime = Date.now();
-            _fpsTotal = [0];
-        }
-        else
-        {
-            _delta = (Date.now() - _lastCalledTime)/1000;
-
-            _lastCalledTime = Date.now();
-            _fpsTotal.push(1/_delta);
-            
-            if(_fpsTotal.length > 50)
-                _fpsTotal.shift();
-        }
-        
-        _data.innerHTML = Math.round(_fpsTotal.reduce((total, num)=>{return total + num;}) / _fpsTotal.length) + ' fps <br />' + collisionCount + ' collisions';
-    }
-    
-    
-    // clear canvas
-    
-    function _clearCanvas(){
-        
-        for(let ctr = 0; ctr < arguments.length; ctr++)
-        {
-            let arg = arguments[ctr];
-                        
-            if(Array.isArray(arg))
-                for(let ctr2 = 0; ctr2 < arg.length; ctr2++)
-                {
-                    let obj = arg[ctr2].object,
-                        marginX = obj.width * 1.5,
-                        marginY = obj.height * 0.75;
-
-                    if(obj.active)
-                    {
-                        _worldCTX.clearRect(
-                                            obj.x - marginX, 
-                                            obj.y - marginY, 
-                                            obj.width + marginX * 2, 
-                                            obj.height + marginY * 2
-                                            );
-
-
-                        if(_objectManager.debugMode)
-                            drawRect(_worldCTX, obj.x - marginX, obj.y - marginY, obj.width + marginX * 2, obj.height + marginY * 2, 'tranparent', 'purple');
-                    }
-                }
-        }
-        
+        data.innerHTML = fps + ' fps <br />' + collisionCount + ' collisions';
     }
     
     
@@ -483,18 +431,22 @@ window.addEventListener('load', (e)=>{
     World.init();
     World.start();
     
+    // pause the game on blur and resume it on focus
     window.addEventListener('blur', (e)=>{World.stop()});
     window.addEventListener('focus', (e)=>{World.start()});
     
+    // set target reticle to mouse poistion on mouse move
     window.addEventListener('mousemove', (e)=>{
     
-        $('#pointer').style.left = e.pageX + 'px'; 
-        $('#pointer').style.top = e.pageY + 'px'; 
+        const pointer = $('#pointer');
+        
+        TweenMax.killTweensOf(pointer);
+        TweenMax.to(pointer, 0.15, {x: e.pageX, y: e.pageY, ease: Cubic.easeOut});
         
     });
     
 });
-},{"./helpers/":3,"./input_manager/input":6,"./objects/bullet":8,"./objects/managers/":10,"./objects/player/":14,"./objects/player/player_animator":15,"./objects/player/player_input":16,"./renderer/helpers":18,"./terrain/":20,"qt-js":1}],8:[function(require,module,exports){
+},{"./helpers/":3,"./input_manager/input":6,"./objects/bullet":8,"./objects/managers/":10,"./objects/player/":14,"./objects/player/player_animator":15,"./objects/player/player_input":16,"./renderer/fps":18,"./renderer/helpers":19,"./terrain/":21,"qt-js":1}],8:[function(require,module,exports){
 const {Geom, Circ, Point, testCirc} = require('qt-js');
 
 class Bullet extends Circ{
@@ -828,7 +780,7 @@ class BulletManager extends Manager{
 
 
 module.exports = BulletManager;
-},{"./../../helpers/":3,"./../../renderer/animator":17,"./../../renderer/helpers":18,"./../../renderer/sprite":19,"./../bullet/":8,"./manager":11,"./particle_manager":13,"qt-js":1}],10:[function(require,module,exports){
+},{"./../../helpers/":3,"./../../renderer/animator":17,"./../../renderer/helpers":19,"./../../renderer/sprite":20,"./../bullet/":8,"./manager":11,"./particle_manager":13,"qt-js":1}],10:[function(require,module,exports){
 const Manager = require('./manager');
 const ObjectManager = require('./object_manager');
 const BulletManager = require('./bullet_manager');
@@ -916,7 +868,7 @@ class Manager{
 }
 
 module.exports = Manager;
-},{"./../../renderer/helpers":18}],12:[function(require,module,exports){
+},{"./../../renderer/helpers":19}],12:[function(require,module,exports){
 const {drawRect} = require('./../../renderer/helpers');
 
 const Manager = require('./manager');
@@ -984,7 +936,7 @@ class ObjectManager extends Manager{
 }
 
 module.exports = ObjectManager;
-},{"./../../renderer/helpers":18,"./manager":11}],13:[function(require,module,exports){
+},{"./../../renderer/helpers":19,"./manager":11}],13:[function(require,module,exports){
 const {randRange} = require('./../../helpers/');
 
 const {Geom} = require('qt-js');
@@ -1178,7 +1130,7 @@ class ParticleManager extends Manager{
 
 
 module.exports = ParticleManager;
-},{"./../../helpers/":3,"./../../renderer/helpers":18,"./../bullet/":8,"./manager":11,"qt-js":1}],14:[function(require,module,exports){
+},{"./../../helpers/":3,"./../../renderer/helpers":19,"./../bullet/":8,"./manager":11,"qt-js":1}],14:[function(require,module,exports){
 const {Geom, Box, testRect} = require('qt-js');
 
 class Character extends Box{
@@ -1404,8 +1356,10 @@ class Character extends Box{
         
         const collideList = [];
         
+        // retrieve the the possible terrain colliders for the character
         tree.retrieve(collideList, collideBounds);
-                        
+        
+        // update the character's hitbox positions
         this.moveHitBox(newX, newY);
             
         const hit = this.terrainHitTest(collideList),
@@ -1683,7 +1637,7 @@ class PlayerAnimator extends Animator{
 
 
 module.exports = PlayerAnimator;
-},{"./../../renderer/animator":17,"./../../renderer/sprite":19,"qt-js":1}],16:[function(require,module,exports){
+},{"./../../renderer/animator":17,"./../../renderer/sprite":20,"qt-js":1}],16:[function(require,module,exports){
 const {randRange} = require('./../../helpers/');
 
 const {Geom} = require('qt-js');
@@ -1703,7 +1657,7 @@ class PlayerInput extends InputManager{
         this.mouseX = window.innerWidth;
         this.mouseY = window.innerHeight;
         
-        this.lookUpThreshold = -55;
+        this.lookUpThreshold = -60;
         this.lookDownThreshold = 55;
         
         this.angleLock = false;
@@ -2068,6 +2022,33 @@ class Animator{
 
 module.exports = Animator;
 },{}],18:[function(require,module,exports){
+let lastCalledTime = 0,
+    fpsTotal = [],
+    delta = 0;
+
+function renderFps()
+{    
+    if(!lastCalledTime) {
+        lastCalledTime = Date.now();
+        fpsTotal = [0];
+    }
+    else
+    {
+        delta = (Date.now() - lastCalledTime)/1000;
+
+        lastCalledTime = Date.now();
+        fpsTotal.push(1/delta);
+            
+        if(fpsTotal.length > 50)
+            fpsTotal.shift();
+    }
+        
+    
+    return Math.round(fpsTotal.reduce((total, num)=>{return total + num;}) / fpsTotal.length);    
+}
+
+module.exports = renderFps;
+},{}],19:[function(require,module,exports){
 // rendering
     
     function _drawRect(dest, x, y, width, height, fillColor, strokeColor, lineWidth){
@@ -2113,7 +2094,7 @@ module.exports = Animator;
 
 module.exports.drawRect = _drawRect;
 module.exports.drawCirc = _drawCirc;
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 const priVars = new WeakMap();
 
 class Sprite{
@@ -2191,7 +2172,7 @@ class Sprite{
 }
 
 module.exports = Sprite;
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 const {QT, Box, Circ, testCirc} = require('qt-js');
 const {drawCirc} = require('./../renderer/helpers');
 
@@ -2438,7 +2419,7 @@ class Terrain{
 }
 
 module.exports = Terrain;
-},{"./../renderer/helpers":18,"./terrain_px":21,"qt-js":1}],21:[function(require,module,exports){
+},{"./../renderer/helpers":19,"./terrain_px":22,"qt-js":1}],22:[function(require,module,exports){
 const {Box} = require('qt-js');
 
 class TerrainPx extends Box{

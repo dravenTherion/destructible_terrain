@@ -1,5 +1,6 @@
 // Helpers
 const {$} = require('./helpers/');
+const renderFps = require('./renderer/fps');
 const {drawRect, drawCirc} = require('./renderer/helpers');
 
 // Quadtree Components
@@ -52,11 +53,7 @@ var World = (function(){
                 
         _data,
         
-        _bullets = [],        
-        
-        _lastCalledTime = 0,
-        _fpsTotal = [],
-        _delta = 0;
+        _bullets = [];
     
     
     function _init(){
@@ -159,8 +156,7 @@ var World = (function(){
         _player.y = 200;                        
         
         
-        // initialize player input manager
-        
+        // initialize player input manager   
         _playerInputManager.attach(_player);
         _playerInputManager.addInputs(
         
@@ -204,7 +200,7 @@ var World = (function(){
         
     }
 
-    // rendering
+    // render frame
     function _render(){
         
         let collisionCount  = 0;
@@ -229,57 +225,9 @@ var World = (function(){
         collisionCount += _bulletManager.update().collisions;
         collisionCount += _objectManager.update().collisions;
         
+        const fps = renderFps();
         
-        if(!_lastCalledTime) {
-            _lastCalledTime = Date.now();
-            _fpsTotal = [0];
-        }
-        else
-        {
-            _delta = (Date.now() - _lastCalledTime)/1000;
-
-            _lastCalledTime = Date.now();
-            _fpsTotal.push(1/_delta);
-            
-            if(_fpsTotal.length > 50)
-                _fpsTotal.shift();
-        }
-        
-        _data.innerHTML = Math.round(_fpsTotal.reduce((total, num)=>{return total + num;}) / _fpsTotal.length) + ' fps <br />' + collisionCount + ' collisions';
-    }
-    
-    
-    // clear canvas
-    
-    function _clearCanvas(){
-        
-        for(let ctr = 0; ctr < arguments.length; ctr++)
-        {
-            let arg = arguments[ctr];
-                        
-            if(Array.isArray(arg))
-                for(let ctr2 = 0; ctr2 < arg.length; ctr2++)
-                {
-                    let obj = arg[ctr2].object,
-                        marginX = obj.width * 1.5,
-                        marginY = obj.height * 0.75;
-
-                    if(obj.active)
-                    {
-                        _worldCTX.clearRect(
-                                            obj.x - marginX, 
-                                            obj.y - marginY, 
-                                            obj.width + marginX * 2, 
-                                            obj.height + marginY * 2
-                                            );
-
-
-                        if(_objectManager.debugMode)
-                            drawRect(_worldCTX, obj.x - marginX, obj.y - marginY, obj.width + marginX * 2, obj.height + marginY * 2, 'tranparent', 'purple');
-                    }
-                }
-        }
-        
+        data.innerHTML = fps + ' fps <br />' + collisionCount + ' collisions';
     }
     
     
@@ -309,13 +257,17 @@ window.addEventListener('load', (e)=>{
     World.init();
     World.start();
     
+    // pause the game on blur and resume it on focus
     window.addEventListener('blur', (e)=>{World.stop()});
     window.addEventListener('focus', (e)=>{World.start()});
     
+    // set target reticle to mouse poistion on mouse move
     window.addEventListener('mousemove', (e)=>{
     
-        $('#pointer').style.left = e.pageX + 'px'; 
-        $('#pointer').style.top = e.pageY + 'px'; 
+        const pointer = $('#pointer');
+        
+        TweenMax.killTweensOf(pointer);
+        TweenMax.to(pointer, 0.15, {x: e.pageX, y: e.pageY, ease: Cubic.easeOut});
         
     });
     
