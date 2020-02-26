@@ -428,6 +428,8 @@ var World = (function(){
 
 window.addEventListener('load', (e)=>{
     
+    $('#root').classList.add('loaded');
+    
     World.init();
     World.start();
     
