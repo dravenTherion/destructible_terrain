@@ -440,10 +440,11 @@ window.addEventListener('load', (e)=>{
     // set target reticle to mouse poistion on mouse move
     window.addEventListener('mousemove', (e)=>{
     
-        const pointer = $('#pointer');
+        const pointer = $('#pointer'),
+              rect = pointer.getBoundingClientRect();
         
         TweenMax.killTweensOf(pointer);
-        TweenMax.to(pointer, 0.15, {x: e.pageX, y: e.pageY, ease: Cubic.easeOut});
+        TweenMax.to(pointer, 0.15, {left: e.pageX, top: e.pageY, ease: Cubic.easeOut});
         
     });
     
